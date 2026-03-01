@@ -108,6 +108,71 @@ https://github.com/tyger07/BF4-Server-Stats/zipball/master
     `$banner_url = 'http://tyger07.github.io/BF4-Server-Stats/'; // where clicking the banner will take you`
 
 
+
+
+### Docker Deployment
+
+This project is published to GitHub Container Registry (GHCR) and should be run from the published image.
+
+Run with `docker`:
+
+```bash
+docker run -d --name bf4-server-stats -p 8080:80 \
+  -e BF4_DB_HOST=127.0.0.1 \
+  -e BF4_DB_PORT=3306 \
+  -e BF4_DB_NAME=database \
+  -e BF4_DB_USER=user \
+  -e BF4_DB_PASS=pass \
+  -e BF4_CLAN_NAME="MyClan" \
+  -e BF4_BANNER_IMAGE="./common/images/bf4-logo.png" \
+  -e BF4_BANNER_URL="https://example.com" \
+  ghcr.io/alconium-labs/bf4-server-stats:latest
+```
+
+Example `docker-compose.yml`:
+
+```yaml
+services:
+  bf4-server-stats:
+    image: ghcr.io/alconium-labs/bf4-server-stats:latest
+    container_name: bf4-server-stats
+    ports:
+      - "8080:80"
+    environment:
+      BF4_DB_HOST: "127.0.0.1"
+      BF4_DB_PORT: "3306"
+      BF4_DB_NAME: "database"
+      BF4_DB_USER: "user"
+      BF4_DB_PASS: "pass"
+      BF4_CLAN_NAME: "MyClan"
+      BF4_BANNER_IMAGE: "./common/images/bf4-logo.png"
+      BF4_BANNER_URL: "https://example.com"
+    restart: unless-stopped
+```
+
+If an environment variable is not provided, the app falls back to the default value in `config/config.php`.
+
+Environment variables supported:
+
+* `BF4_DB_HOST`
+* `BF4_DB_PORT`
+* `BF4_DB_NAME`
+* `BF4_DB_USER`
+* `BF4_DB_PASS`
+* `BF4_CLAN_NAME`
+* `BF4_BANNER_IMAGE`
+* `BF4_BANNER_URL`
+
+### GitHub Package (GHCR) Auto Publish
+
+A GitHub Actions workflow is included at `.github/workflows/docker-publish.yml`.
+
+* Trigger: Push to `main` branch.
+* Registry: GitHub Container Registry (`ghcr.io`).
+* Tag policy: `latest` only.
+* Architectures: `linux/amd64` and `linux/arm64` (multi-arch manifest).
+* Image name format: `ghcr.io/alconium-labs/bf4-server-stats:latest`.
+
 ### Additional Information
 
 A .sql file is included in the ./test-database/ folder for users to set up a dummy test database to test this web page when they otherwise have not yet set up a server or have not yet got XpKiller's Stats Logger plugin and database working.
