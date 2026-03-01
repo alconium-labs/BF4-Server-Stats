@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Monitor updates for the Docker base image in Dockerfile (e.g. php:8.2-apache)
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - docker
+
+  # Monitor updates for GitHub Actions used in workflows
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - github-actions
