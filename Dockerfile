@@ -19,6 +19,7 @@ RUN apt-get update \
         pdo_mysql \
         xml \
         zip \
+    && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/html
