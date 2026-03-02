@@ -334,9 +334,9 @@ if(@mysqli_num_rows($Players_q) != 0)
 	while($Players_r = @mysqli_fetch_assoc($Players_q))
 	{
 		$Score = $Players_r['Score'];
-		$Playtime = $Players_r['Playtime'];
-		$Playhours = floor($Playtime / 3600);
-		$Playminutes = floor(($Playtime / 60) % 60);
+		$Playtime = (int)$Players_r['Playtime'];
+		$Playhours = intdiv($Playtime, 3600);
+		$Playminutes = intdiv(($Playtime % 3600), 60);
 		$Playseconds = $Playtime % 60;
 		$Playtime = $Playhours . ':' . $Playminutes . ':' . $Playseconds;
 		$SoldierName = textcleaner($Players_r['SoldierName']);
