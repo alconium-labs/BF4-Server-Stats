@@ -24,6 +24,13 @@ RUN apt-get update \
 
 COPY . /var/www/html
 
+RUN a2enmod remoteip
+
+RUN echo "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16" > /etc/apache2/conf-available/remoteip.conf \
+    && a2enconf remoteip
+
+RUN sed -i 's/%h/%a/g' /etc/apache2/apache2.conf
+
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/common/server-banner/cache
 
