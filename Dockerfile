@@ -9,6 +9,7 @@ RUN apt-get update \
         libpng-dev \
         libzip-dev \
         libonig-dev \
+        libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" \
         bcmath \
