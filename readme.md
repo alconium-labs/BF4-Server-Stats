@@ -57,56 +57,54 @@ https://github.com/tyger07/BF4-Server-Stats/issues/new
 
 ### Installation Steps
 
-1) Download the following file:
-https://github.com/tyger07/BF4-Server-Stats/zipball/master
 
-2) Extract the files. (maintain the original folder structure)
+## Environment
 
-3) Fill in the required parameters in ./config/config.php.  For help with properly modifying the config.php file, see additional instructions further down in this readme file.
-
-    Note:  You may not include single quotation marks (') in the config.php fields without also using an appropriate php delimiter. For instance, you may not call your clan `'Ty_ger07's Clan'` as it would cause a php compilation error due to the unequal and ambiguously placed single quotation marks.
-
-    Using an appropriate php delimiter, when required, would cause it to work properly.  For example:
-
-    `$clan_name = 'Ty_ger07\'s Clan';`
-
-4) Upload the entire contents to your php-enabled web server and enjoy!
-
-
-### You must fill in the following information in config.php which is in the config folder.
-
-1) Input your stats database host, stats database user name, stats database password, and stats database name.
-
-    For example:
-
-    ```
-    // DATABASE INFORMATION
-    DEFINE('HOST', '100.200.300.400'); // database host address
-    DEFINE('PORT', '3306');            // database port - default is 3306
-    DEFINE('NAME', 'database');        // database name
-    DEFINE('USER', 'user');		// database user name - sometimes the same as the database name
-    DEFINE('PASS', 'pass');		// database password
-    ```
-
-    Note: Some web server providers use the same value for database name and database user name.
+| name | required | default | explane |
+| --- | --- | --- | --- |
+| `BF4_DB_HOST` | Yes | - | - |
+| `BF4_DB_PORT` | Yes | - | - |
+| `BF4_DB_NAME` | Yes | - | - |
+| `BF4_DB_USER` | Yes | - | - |
+| `BF4_DB_PASS` | Yes | - | - |
+| `BF4_CLAN_NAME` | Yes | - | - |
+| `BF4_BANNER_IMAGE` | Yes | - | - |
+| `BF4_BANNER_URL` | Yes | - | - |
 
 
-2) Input your clan name as you would like it to appear in the stats pages.
+## Docker Compose example
 
-    For example:
+```yaml
+services:
+  mariadb:
+    image: mariadb:lts
+    container_name: bf4-server-stats-db
+    restart: always
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+      - ./initdb.d:/docker-entrypoint-initdb.d
+  bf4-server-stats:
+    image: ghcr.io/alconium-labs/bf4-server-stats:latest
+    container_name: bf4-server-stats
+    ports:
+      - 8080:80
+    environment:
+      BF4_DB_HOST: bf4-server-stats-db
+      BF4_DB_PORT: "3306"
+      BF4_DB_NAME: db
+      BF4_DB_USER: user
+      BF4_DB_PASS: CHANGEME
+      BF4_CLAN_NAME: CHANGEME
+      BF4_BANNER_IMAGE: ./common/images/bf4-logo.png
+      BF4_BANNER_URL: https://example.com/
+    restart: unless-stopped
+```
 
-    `$clan_name = 'MyClan';             // your gaming clan or organization name`
+## Image architecture
 
-
-3) Input your desired banner image URL if you want one other than the default banner image to be displayed.
-
-    `$banner_image = './images/bf4-logo.png'; // your desired page banner`
-
-
-4) Enter the URL which you would like users to redirect to when they click your banner image.
-
-    `$banner_url = 'http://tyger07.github.io/BF4-Server-Stats/'; // where clicking the banner will take you`
-
+amd64, arm64
 
 ### Additional Information
 
